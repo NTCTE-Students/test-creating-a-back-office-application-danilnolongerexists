@@ -16,10 +16,13 @@ return new class extends Migration
         if (! Schema::hasTable('notifications')) {
             Schema::create('notifications', function (Blueprint $table) {
                 $table->uuid('id')->primary();
+                $table->foreignId('user_id')->constrained();
+                $table->foreignId('client_id')->nullable()->constrained();
+                $table->foreignId('order_id')->nullable()->constrained();
                 $table->string('type');
                 $table->morphs('notifiable');
-                $table->text('data');
-                $table->timestamp('read_at')->nullable();
+                $table->text('message');
+                $table->timestamp('sent_at')->useCurrent();
                 $table->timestamps();
             });
         }
