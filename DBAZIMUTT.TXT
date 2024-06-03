@@ -1,0 +1,69 @@
+users
+  id bigint pk
+  username VARCHAR(50) UNIQUE
+  password_hash VARCHAR(255)
+  role ENUM('admin', 'manager', 'employee')
+
+clients
+  id bigint pk
+  name VARCHAR(100)
+  email VARCHAR(100) UNIQUE
+  phone VARCHAR(20)
+  address VARCHAR(255)
+  last_contact_date DATE
+
+orders
+  id bigint pk
+  client_id bigint
+  order_date DATE
+  status ENUM('pending', 'processed', 'shipped', 'delivered', 'canceled')
+  total DECIMAL(10, 2)
+
+inventory
+  id bigint pk
+  item_name VARCHAR(100)
+  description TEXT
+  quantity bigint
+  price DECIMAL(10, 2)
+  alert_threshold bigint
+
+order_items
+  id bigint pk
+  order_id bigint
+  item_id nigint
+  quantity bigint
+
+finances
+  id bigint pk
+  user_id bigint
+  order_id bigint
+  transaction_date DATE
+  type ENUM('income', 'expense')
+  amount DECIMAL(10, 2)
+  description TEXT
+
+notifications
+  id bigint pk
+  user_id bigint
+  client_id bigint
+  order_id bigint
+  message TEXT
+  sent_at TIMESTAMP
+
+email_logs
+  id bigint pk
+  user_id bigint
+  client_id bigint
+  subject VARCHAR(255)
+  body TEXT
+  sent_at TIMESTAMP
+fk orders.client_id -> clients.id
+fk notifications.user_id -> users.id
+fk notifications.client_id -> clients.id
+fk notifications.order_id -> orders.id
+fk email_logs.user_id -> users.id
+fk email_logs.client_id -> clients.id
+fk order_items.order_id -> orders.id
+fk order_items.item_id -> inventory.id
+fk finances.user_id -> users.id
+fk finances.order_id -> orders.id
